@@ -432,7 +432,7 @@ The design mirrors the research: normalize domain vocabulary, extract structured
     
 ![score_distributions_comprehensive.png](resume_ranking_research/data/results/thesis_plots/score_distributions_comprehensive.png)
 
-![simple_comparison.png](resume_ranking_research/data/results/thesis_plots/simple_comparison.png)
+![simple_comparison.png](simple_comparison.png)
 
 ![comparison_metrics.png](resume_ranking_research/analysis/ranking_comparison_plots/comparison_metrics.png)
 
