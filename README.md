@@ -430,14 +430,14 @@ The design mirrors the research: normalize domain vocabulary, extract structured
 
 
 # Plots generated
-![ranking_correlation_analysis.png](resume_ranking_research/data/results/thesis_plots/ranking_correlation_analysis.png)
+![ranking_correlation_analysis.png](ranking_correlation_analysis.png)
     
-![score_distributions_comprehensive.png](resume_ranking_research/data/results/thesis_plots/score_distributions_comprehensive.png)
+![score_distributions_comprehensive.png](score_distributions_comprehensive.png)
 
 ![simple_comparison.png](simple_comparison.png)
 
-![comparison_metrics.png](resume_ranking_research/analysis/ranking_comparison_plots/comparison_metrics.png)
+![comparison_metrics.png](comparison_metrics.png)
 
-[tfidf_results_comprehensive.csv](resume_ranking_research/data/results/tfidf_results_comprehensive.csv)
+[tfidf_results_comprehensive.csv](tfidf_results_comprehensive.csv)
 
-[sbert_results_comprehensive.csv](resume_ranking_research/data/results/sbert_results_comprehensive.csv)
+[sbert_results_comprehensive.csv](sbert_results_comprehensive.csv)
