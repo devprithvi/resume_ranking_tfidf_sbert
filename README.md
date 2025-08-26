@@ -96,17 +96,17 @@ The design mirrors the research: normalize domain vocabulary, extract structured
 
 # Pipeline for this project
 
-[main_20k.py](resume_ranking_research/main_10k.py)
+[main_20k.py](main_10k.py)
 
-[data_loader.py](resume_ranking_research/data/data_loader.py)
+[data_loader.py](data_loader.py)
 
-[ImprovedDataPreprocessor.py](resume_ranking_research/preprocess/ImprovedDataPreprocessor.py)
+[ImprovedDataPreprocessor.py](ImprovedDataPreprocessor.py)
 
-[DataProcessingPlots.py](resume_ranking_research/preprocess/data/DataProcessingPlots.py)
+[DataProcessingPlots.py](DataProcessingPlots.py)
 
-[tfidf_ranker.py](resume_ranking_research/model/tfidf_ranker.py)
+[tfidf_ranker.py](tfidf_ranker.py)
 
-[AdvancedRankerEvaluator.py](resume_ranking_research/analysis/AdvancedRankerEvaluator.py)
+[AdvancedRankerEvaluator.py](AdvancedRankerEvaluator.py)
 
 ## DATASET CHARACTERISTICS AND PREPROCESSING OUTCOMES:
     Professional Domain Distribution:
