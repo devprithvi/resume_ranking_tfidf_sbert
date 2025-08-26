@@ -27,7 +27,9 @@ The design mirrors the research: normalize domain vocabulary, extract structured
 
 # Dataset
 * Source: Djinni Recruitment datasets for English‑language Job Descriptions and Candidate Profiles, used in UNLP‑2024, suitable for resume–job matching research and benchmarking.
+* recruitment-dataset-job-descriptions-english [https://huggingface.co/datasets/lang-uk/recruitment-dataset-job-descriptions-english]
 
+* recruitment-dataset-candidate-profiles-english [https://huggingface.co/datasets/lang-uk/recruitment-dataset-candidate-profiles-english]
 
 * Scale: 141,897 JDs and 210,207 resumes; evaluation uses stratified 20,000 jobs and 20,000 candidates to preserve domain and seniority distributions.
 
