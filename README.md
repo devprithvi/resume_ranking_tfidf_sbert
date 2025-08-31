@@ -480,7 +480,27 @@ The design mirrors the research: normalize domain vocabulary, extract structured
 
 [sbert_results_comprehensive.csv](sbert_results_comprehensive.csv)
 
-
+# advanced evaluation with comprehensive metrics including MRR, NDCG, MAP, statistical significance testing, and correlation analysis
+    This class is responsible for advance comprehensive metrics
+    [AdvancedRankerEvaluator.py](AdvancedRankerEvaluator.py)
+    
+    **compute_advanced_mrr**
+        MRR shows how quickly a ranking presents the first relevant candidate by averaging the inverse of that rank across jobs. A higher MRR means the             system tends to highlight a suitable candidate Very early in the list is crucial for recruiter efficiency. In this study, MRR is used to compare            TF-IDF and SBERT based on "first-hit" performance. Both methods showed similar results around 0.044, indicating comparable chances of early success         despite their different scoring behaviors.
+    
+    **What MRR measures**  
+    Mean Reciprocal Rank is the average of per-job reciprocal ranks. The reciprocal rank for a job is 1/r, where r is the position of the first relevant        candidate (or 0 if none is found). Thus, MRR equals 1/|Q| times the sum of 1/rj for all jobs in Q.
+    
+    It emphasizes the earliest relevant hit and ignores later relevant results. This makes it ideal when success is defined as “finding one good candidate      fast.”
+    
+    **Why MRR is important**  
+    Recruiters typically scan only the first few results. A metric that highlights top positions most, through 1/r, directly reflects screening efficiency      and user satisfaction. 
+    
+    In situations with time pressure or high volume, such as resume screening, improving the first relevant match often leads to significant productivity       gains, which MRR captures clearly.
+    
+    **How it’s computed in this code**  
+    For each job, the algorithm scans the ranked list from the top down. It records 1/rank for the first candidate whose graded relevance meets a threshold     (e.g., ≥0.2) and then stops. If no candidate qualifies, it records 0.
+    
+[comprehensive_advanced_metrics](comprehensive_advanced_metrics.png)
 
 ## Lexical baseline  
 The TF-IDF setup uses max_features=20,000, n-grams (1,2), min_df=5, max_df=0.8, sublinear TF, L2 normalization, cosine similarity, and retrieves k=10 nearest neighbors.  
