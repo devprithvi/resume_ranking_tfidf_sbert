@@ -568,3 +568,16 @@ Score distributions show a higher mean for SBERT (~0.74) compared to TF-IDF (~0.
 SBERT and FAISS improve early precision, especially in areas where attention and decision-making are key. On the other hand, TF-IDF is efficient, stable, and clear for broad and specific skills.  
 A practical approach is a hybrid model that retrieves a pool of candidates using keywords and then applies semantic reranking to enhance the top results, where recruiters focus the most.  
 Future work will involve learn-to-rank hybrids, fairness-aware reranking, adapting to different domains, and A/B tests to confirm improvements in real scenarios.
+
+# Reference
+
+    @article{douze2024faiss,
+          title={The Faiss library},
+          author={Matthijs Douze and Alexandr Guzhva and Chengqi Deng and Jeff Johnson and Gergely Szilvasy and Pierre-Emmanuel Mazaré and Maria Lomeli and         Lucas Hosseini and Hervé Jégou},
+          year={2024},
+          eprint={2401.08281},
+          archivePrefix={arXiv},
+          primaryClass={cs.LG}
+    }
+
+    
