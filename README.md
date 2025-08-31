@@ -1,4 +1,4 @@
-# resume_ranking_tfidf_sbert
+# resume_ranking_tfidf_vs_sbert
 
 
 # Analysis and Ranking Resumes using Machine‑Learning Algorithms and NLP
@@ -429,7 +429,45 @@ The design mirrors the research: normalize domain vocabulary, extract structured
     2025-08-24 18:05:45,270 - __main__ - INFO - Pipeline cleanup completed. Final memory usage: 578.5 MB
 
 
-# Plots generated
+# Plots: standard ranking comparison analysis
+# NOTE:
+    **Calculate a Spearman correlation coefficient with associated p-value.**
+    
+    The Spearman rank-order correlation coefficient is a nonparametric measure
+    of the monotonicity of the relationship between two datasets.
+    Like other correlation coefficients,
+    this one varies between -1 and +1 with 0 implying no correlation.
+    Correlations of -1 or +1 imply an exact monotonic relationship. Positive
+    correlations imply that as x increases, so does y. Negative correlations
+    imply that as x increases, y decreases.
+    
+    
+    **Calculate Kendall's tau, a correlation measure for ordinal data.**
+    
+    Kendall's tau is a measure of the correspondence between two rankings.
+    Values close to 1 indicate strong agreement, and values close to -1
+    indicate strong disagreement. This implements two variants of Kendall's
+    tau: tau-b (the default) and tau-c (also known as Stuart's tau-c). These
+    differ only in how they are normalized to lie within the range -1 to 1;
+    the hypothesis tests (their p-values) are identical. Kendall's original
+    tau-a is not implemented separately because both tau-b and tau-c reduce
+    to tau-a in the absence of ties.
+    
+    
+    **Pearson correlation coefficient and p-value for testing non-correlation.**
+    
+    The Pearson correlation coefficient [1]_ measures the linear relationship
+    between two datasets. Like other correlation
+    coefficients, this one varies between -1 and +1 with 0 implying no
+    correlation. Correlations of -1 or +1 imply an exact linear relationship.
+    Positive correlations imply that as x increases, so does y. Negative
+    correlations imply that as x increases, y decreases.
+    
+    **Jaccard Similarity**,
+    also known as the Jaccard index, is a statistic used to measure the similarity between 
+    two sets of items by calculating the ratio of the size of theirintersection to the 
+    size of their union. The formula is: J(A, B) = |A ∩ B| / |A ∪ B|
+    
 ![ranking_correlation_analysis.png](ranking_correlation_analysis.png)
     
 ![score_distributions_comprehensive.png](score_distributions_comprehensive.png)
@@ -441,3 +479,28 @@ The design mirrors the research: normalize domain vocabulary, extract structured
 [tfidf_results_comprehensive.csv](tfidf_results_comprehensive.csv)
 
 [sbert_results_comprehensive.csv](sbert_results_comprehensive.csv)
+
+
+
+## Lexical baseline  
+The TF-IDF setup uses max_features=20,000, n-grams (1,2), min_df=5, max_df=0.8, sublinear TF, L2 normalization, cosine similarity, and retrieves k=10 nearest neighbors.  
+Its strengths include interpretability, efficiency, and strong performance on exact skill matches where the vocabulary closely aligns between resumes and job descriptions.  
+Limitations arise with vocabulary mismatch, paraphrases, and contexts where meaning is shared but words differ. This suggests a limit on recall for softer requirements.  
+
+## Semantic system  
+The semantic system uses SBERT all-MiniLM-L6-v2 to produce 384-dimensional, L2-normalized embeddings. These are indexed in FAISS with a flat exact inner-product search that corresponds to cosine for normalized vectors. 
+ 
+Batch embedding, caching, index serialization, and memory-safe processing ensure throughput and reliability without sacrificing retrieval quality for an equal comparison.  
+Its strengths include capturing paraphrases and soft skills. It is also robust when terms differ, which is crucial for cross-domain and non-tech roles.
+
+## Evaluation
+
+Metrics include MRR for early success, Precision/Recall@K for quality and coverage, and nDCG@K for position-aware utility under a realistic attention model. A user behavior model applies exponentially decaying attention across ranks with λ ≈ 0.3 to weight early positions more heavily, reflecting how recruiters scan. We test significance by running repeated trials with fixed seeds. We report means and intervals to ensure that results are stable and reproducible.
+
+## Key results  
+Score distributions show a higher mean for SBERT (~0.74) compared to TF-IDF (~0.21). This indicates broader semantic capture even when the wording differs. Despite this, MRR is almost the same (~0.044 for each), implying a similar chance of an early “hit.” The nDCG shows SBERT leading at top ranks K = 1–3 by +4–8%, while TF-IDF slightly outperforms at deeper ranks K = 5–10 by +4–6%. MAP reflects SBERT performs better at the very top K = 1–3, but both methods converge by K = 10. This supports a hybrid approach where semantic reranking improves a strong lexical candidate set.
+
+## Conclusion  
+SBERT and FAISS improve early precision, especially in areas where attention and decision-making are key. On the other hand, TF-IDF is efficient, stable, and clear for broad and specific skills.  
+A practical approach is a hybrid model that retrieves a pool of candidates using keywords and then applies semantic reranking to enhance the top results, where recruiters focus the most.  
+Future work will involve learn-to-rank hybrids, fairness-aware reranking, adapting to different domains, and A/B tests to confirm improvements in real scenarios.
