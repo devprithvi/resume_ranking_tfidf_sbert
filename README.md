@@ -500,7 +500,7 @@ The design mirrors the research: normalize domain vocabulary, extract structured
     **How it’s computed in this code**  
     For each job, the algorithm scans the ranked list from the top down. It records 1/rank for the first candidate whose graded relevance meets a threshold     (e.g., ≥0.2) and then stops. If no candidate qualifies, it records 0.
     
-[comprehensive_advanced_metrics](comprehensive_advanced_metrics.png)
+![comprehensive_advanced_metrics](comprehensive_advanced_metrics.png)
 
 ## Lexical baseline  
 The TF-IDF setup uses max_features=20,000, n-grams (1,2), min_df=5, max_df=0.8, sublinear TF, L2 normalization, cosine similarity, and retrieves k=10 nearest neighbors.  
