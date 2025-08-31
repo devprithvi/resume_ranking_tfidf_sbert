@@ -569,15 +569,4 @@ SBERT and FAISS improve early precision, especially in areas where attention and
 A practical approach is a hybrid model that retrieves a pool of candidates using keywords and then applies semantic reranking to enhance the top results, where recruiters focus the most.  
 Future work will involve learn-to-rank hybrids, fairness-aware reranking, adapting to different domains, and A/B tests to confirm improvements in real scenarios.
 
-# Reference
-
-    @article{douze2024faiss,
-          title={The Faiss library},
-          author={Matthijs Douze and Alexandr Guzhva and Chengqi Deng and Jeff Johnson and Gergely Szilvasy and Pierre-Emmanuel Mazaré and Maria Lomeli and         Lucas Hosseini and Hervé Jégou},
-          year={2024},
-          eprint={2401.08281},
-          archivePrefix={arXiv},
-          primaryClass={cs.LG}
-    }
-
     
