@@ -481,11 +481,13 @@ The design mirrors the research: normalize domain vocabulary, extract structured
 [sbert_results_comprehensive.csv](sbert_results_comprehensive.csv)
 
 # advanced evaluation with comprehensive metrics including MRR, NDCG, MAP, statistical significance testing, and correlation analysis
+
+## MRR
     This class is responsible for advance comprehensive metrics
     [AdvancedRankerEvaluator.py](AdvancedRankerEvaluator.py)
     
     **compute_advanced_mrr**
-        MRR shows how quickly a ranking presents the first relevant candidate by averaging the inverse of that rank across jobs. A higher MRR means the             system tends to highlight a suitable candidate Very early in the list is crucial for recruiter efficiency. In this study, MRR is used to compare            TF-IDF and SBERT based on "first-hit" performance. Both methods showed similar results around 0.044, indicating comparable chances of early success         despite their different scoring behaviors.
+    It shows how quickly a ranking presents the first relevant candidate by averaging the inverse of that rank across jobs. A higher MRR means the                system tends to highlight a suitable candidate Very early in the list is crucial for recruiter efficiency. In this study, MRR is used to compare            TF-IDF and SBERT based on "first-hit" performance. Both methods showed similar results around 0.044, indicating comparable chances of early success         despite their different scoring behaviors.
     
     **What MRR measures**  
     Mean Reciprocal Rank is the average of per-job reciprocal ranks. The reciprocal rank for a job is 1/r, where r is the position of the first relevant        candidate (or 0 if none is found). Thus, MRR equals 1/|Q| times the sum of 1/rj for all jobs in Q.
@@ -501,6 +503,48 @@ The design mirrors the research: normalize domain vocabulary, extract structured
     For each job, the algorithm scans the ranked list from the top down. It records 1/rank for the first candidate whose graded relevance meets a threshold     (e.g., ≥0.2) and then stops. If no candidate qualifies, it records 0.
     
 ![comprehensive_advanced_metrics](comprehensive_advanced_metrics.png)
+
+## NDCG
+   measures how well a ranking places the most relevant results near the top. It combines graded relevance with position discounting. This metric is            important because it reflects real recruiter behavior. Items appearing early in the list are more valuable. Additionally, NDCG is comparable across          different jobs. In this project, we calculate NDCG@K at K = 1, 3, 5, and 10 using the graded ground truth. This helps us contrast TF-IDF and SBERT at        shallow and deeper ranks. This analysis reveals complementary strengths that inform a hybrid reranking design.
+    
+    What NDCG is  
+    DCG combines graded relevance with a positional discount, meaning higher ranks count more:  
+    DCG@K = ∑ (from i=1 to K) rel[i] / log2(i + 1).
+    
+    NDCG normalizes DCG by the ideal DCG (IDCG). This results in scores that are comparable across jobs with different numbers of relevant candidates:  
+    NDCG@K = DCG@K / IDCG@K.
+    
+    The gain can be linear rel (as in the code) or exponential (2^rel - 1). Using exponential gain emphasizes highly relevant items more strongly.
+    
+    Why NDCG matters  
+    NDCG is aware of position and grading. Higher relevance at the top is rewarded more than the same relevance lower down. This matches how recruiters         scan lists.  
+    
+    NDCG allows for comparison across queries through normalization. Thus, differences are not influenced by how many relevant candidates a job has.  
+    
+    NDCG complements MRR and Precision/Recall@K by capturing both the order and the degree of relevance. It considers more than just the first hit or             binary correctness.
+## MAP
+    measures overall ranking quality by averaging the precision at every rank where a relevant item appears. A higher MAP indicates that the system             returns more relevant candidates and positions them earlier across many jobs. In this project, MAP is used along with MRR and NDCG to compare TF-IDF         and SBERT at multiple K cutoffs. The results show that SBERT performs better at small K and converges by K=10, supporting a hybrid reranking                 strategy.
+    
+    What MAP is  
+    Mean Average Precision (MAP) is the mean of Average Precision (AP) calculated for each query or job. AP is the average of Precision@k at each rank k         that has a relevant item. This makes MAP sensitive to order and aware of relevance.
+    
+    Formally, MAP averages AP over all jobs. AP averages Precision@k at the positions of relevant hits. This rewards systems that rank relevant candidates       higher and retrieve more of them.
+    
+    Unlike a single Precision@K, MAP considers the position of every relevant item and combines data across all jobs. This provides a solid view of ranking      effectiveness at the query set level.
+    
+    Why MAP matters  
+    MAP balances precision and position by rewarding the early placement of many relevant candidates. This matches recruiter workflows that value both early     precision and overall quality of candidates.
+    
+    Since it averages over many jobs, MAP is less affected by outliers and provides a stable indication of system performance across various fields and          seniority levels.
+    
+    MAP works well with MRR, which focuses on first hits, and NDCG, which is graded and position-aware. It captures how well a system orders multiple            relevant candidates, rather than just the first or the top-ranked gain.
+    
+    How it’s used here  
+    The pipeline calculates MAP@K for K in {1,3,5,10}. It does this by taking each job’s top-K list, summing Precision@k at the ranks where candidates are       relevant, dividing by the number of relevant candidates, and averaging across jobs.
+    
+    Empirically, SBERT achieves higher MAP at lower K (K=1-3), while both methods converge by K=10. This shows that SBERT has an advantage in delivering         high-quality hits early on, while TF-IDF maintains competitiveness at slightly deeper ranks.
+    
+    These MAP trends, along with MRR equivalents and NDCG crossovers, support a hybrid approach that uses semantic reranking over a lexical shortlist or         combines scores with a customizable weight.
 
 ## Lexical baseline  
 The TF-IDF setup uses max_features=20,000, n-grams (1,2), min_df=5, max_df=0.8, sublinear TF, L2 normalization, cosine similarity, and retrieves k=10 nearest neighbors.  
